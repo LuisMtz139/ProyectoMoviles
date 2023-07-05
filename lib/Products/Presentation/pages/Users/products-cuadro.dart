@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/utils.dart';
+import '/Products/Presentation/pages/Users/compra.dart';
 
 class Scene extends StatelessWidget {
   @override
@@ -498,30 +499,36 @@ class Scene extends StatelessWidget {
                   ),
                   TextButton(
                     // autogroupd8kzkqD (qVRodeDt5Gt5RrrrtD8KZ)
-                    onPressed: () {},
-                    style: TextButton.styleFrom (
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Compra()),
+                      );
+                    },
+                    style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                     ),
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(6*fem, 8*fem, 6*fem, 9*fem),
-                      width: 141*fem,
+                      padding: EdgeInsets.fromLTRB(6 * fem, 8 * fem, 6 * fem, 9 * fem),
+                      width: 141 * fem,
                       height: double.infinity,
-                      decoration: BoxDecoration (
+                      decoration: BoxDecoration(
                         color: Color(0xffffffff),
-                        borderRadius: BorderRadius.circular(5*fem),
+                        borderRadius: BorderRadius.circular(5 * fem),
                       ),
                       child: Text(
                         'Proceder al pago',
-                        style: SafeGoogleFont (
-                          'Inter',
-                          fontSize: 12*ffem,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12 * ffem,
                           fontWeight: FontWeight.w400,
-                          height: 1.2125*ffem/fem,
+                          height: 1.2125 * ffem / fem,
                           color: Color(0xff000000),
                         ),
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '/Products/Presentation/pages/Users/home.dart';
+import '/Products/Presentation/pages/locales/recuperar-contrasea-p1.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,6 +12,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scene(),
+      routes: {
+        '/otherScene': (context) => OtherScene(),
+      },
     );
   }
 }
@@ -20,6 +25,7 @@ class Scene extends StatelessWidget {
     double baseWidth = 320;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -56,7 +62,9 @@ class Scene extends StatelessWidget {
                 left: 32 * fem,
                 top: 433 * fem,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/otherScene');
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                   ),
@@ -197,9 +205,14 @@ class Scene extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                left: 64 * fem,
-                top: 329 * fem,
+              TextButton(
+
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => recuperar()),
+                  );
+                },
                 child: Align(
                   child: SizedBox(
                     width: 85 * fem,
