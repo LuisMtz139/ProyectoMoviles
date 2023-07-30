@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '/Products/Presentation/pages/Users/home.dart';
-import '/Products/Presentation/pages/locales/recuperar-contrasea-p1.dart';
+import 'package:http/http.dart' as http;
+import '../Users/home.dart';
+import './registrar.dart';
+import '../../services/serviceInicio.dart'; // Importa el archivo serviceInicio.dart
 
 void main() {
   runApp(MyApp());
@@ -14,12 +16,53 @@ class MyApp extends StatelessWidget {
       home: Scene(),
       routes: {
         '/otherScene': (context) => OtherScene(),
+        '/registrar': (context) => RegistrarScene(), // Agrega la ruta para la vista de registro
       },
     );
   }
 }
 
-class Scene extends StatelessWidget {
+class Scene extends StatefulWidget {
+  @override
+  _SceneState createState() => _SceneState();
+}
+
+class _SceneState extends State<Scene> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String errorMessage = '';
+
+  void _login(BuildContext context) async {
+    final String email = emailController.text;
+    final String password = passwordController.text;
+
+    // Llama al método login de ServiceInicio para realizar el inicio de sesión.
+    bool isLoggedIn = await ServiceInicio.login(email, password);
+
+    if (isLoggedIn) {
+      // Redirige a OtherScene si el inicio de sesión fue exitoso.
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OtherScene(),
+        ),
+      );
+    } else {
+      // Muestra el mensaje de error en caso de credenciales incorrectas.
+      setState(() {
+        errorMessage = 'Credenciales incorrectas, por favor intenta de nuevo.';
+      });
+    }
+  }
+
+  void _register(BuildContext context) {
+    // Redirige a la vista de registro.
+    // Utilizamos Navigator.pushNamed porque ya definimos la ruta en MaterialApp.
+    Navigator.pushNamed(context, '/registrar');
+    // Si tienes una ruta para la vista de registro, puedes utilizarla así:
+    // Navigator.pushNamed(context, '/registro');
+  }
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 320;
@@ -44,8 +87,19 @@ class Scene extends StatelessWidget {
                   child: SizedBox(
                     width: 98 * fem,
                     height: 13 * fem,
-                    child: Text(
-                      'Email@example.com',
+                    child: TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Email@example.com',
+                        hintStyle: GoogleFonts.inter(
+                          fontSize: 10 * ffem,
+                          fontWeight: FontWeight.w400,
+                          height: 1.2125 * ffem / fem,
+                          decoration: TextDecoration.underline,
+                          color: Color(0x8effffff),
+                          decorationColor: Color(0x8effffff),
+                        ),
+                      ),
                       style: GoogleFonts.inter(
                         fontSize: 10 * ffem,
                         fontWeight: FontWeight.w400,
@@ -63,7 +117,7 @@ class Scene extends StatelessWidget {
                 top: 433 * fem,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/otherScene');
+                    _login(context); // Pasar el BuildContext como argumento
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
@@ -93,7 +147,9 @@ class Scene extends StatelessWidget {
                 left: 32 * fem,
                 top: 489 * fem,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _register(context);
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                   ),
@@ -169,7 +225,7 @@ class Scene extends StatelessWidget {
               ),
               Positioned(
                 left: 34 * fem,
-                top: 10 * fem,
+                top: 2 * fem,
                 child: Align(
                   child: SizedBox(
                     width: 62 * fem,
@@ -205,36 +261,7 @@ class Scene extends StatelessWidget {
                   ),
                 ),
               ),
-              TextButton(
 
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => recuperar()),
-                  );
-                },
-                child: Align(
-                  child: SizedBox(
-                    width: 85 * fem,
-                    height: 9 * fem,
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                      ),
-                      child: Text(
-                        '¿olvidaste tu contraseña?',
-                        style: GoogleFonts.inter(
-                          fontSize: 7 * ffem,
-                          fontWeight: FontWeight.w400,
-                          height: 1.2125 * ffem / fem,
-                          color: Color(0xff7784ff),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               Positioned(
                 left: 63 * fem,
                 top: 279 * fem,
@@ -242,8 +269,17 @@ class Scene extends StatelessWidget {
                   child: SizedBox(
                     width: 65 * fem,
                     height: 13 * fem,
-                    child: Text(
-                      '*************',
+                    child: TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'Contraseña',
+                        hintStyle: GoogleFonts.inter(
+                          fontSize: 10 * ffem,
+                          fontWeight: FontWeight.w400,
+                          height: 1.2125 * ffem / fem,
+                          color: Color(0x8effffff),
+                        ),
+                      ),
                       style: GoogleFonts.inter(
                         fontSize: 10 * ffem,
                         fontWeight: FontWeight.w400,
@@ -253,6 +289,21 @@ class Scene extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+              Positioned(
+                left: 32 * fem,
+                top: 567 * fem,
+                child: errorMessage.isNotEmpty
+                    ? Text(
+                  errorMessage,
+                  style: GoogleFonts.inter(
+                    fontSize: 10 * ffem,
+                    fontWeight: FontWeight.w400,
+                    height: 1.2125 * ffem / fem,
+                    color: Colors.red, // Mostrar mensaje de error en rojo
+                  ),
+                )
+                    : Container(),
               ),
             ],
           ),
